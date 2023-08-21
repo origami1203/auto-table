@@ -13,7 +13,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SqlScript {
     
-    CREATE_TABLE("CREATE TABLE IF NOT EXISTS %s (%s) ENGINE=%s CHARSET = %s");
+    CREATE_TABLE("CREATE TABLE IF NOT EXISTS %s (%s)"),
+    ADD_COLUMN("ALTER TABLE %s ADD %s");
     
     private final String script;
 }
