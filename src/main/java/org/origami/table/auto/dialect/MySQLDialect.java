@@ -54,4 +54,8 @@ public class MySQLDialect extends Dialect {
         registerClassType(String.class, MySQLDataType.VARCHAR);
     }
     
+    @Override
+    protected String getCreateTableString() {
+        return null;
+    }
 }

@@ -30,6 +30,9 @@ public abstract class Dialect {
     }
     
     
+    protected abstract String getCreateTableString();
+    
+    
     protected void registerColumnType(int code, DateType dateType) {
         typeNames.put(code, dateType);
     }
