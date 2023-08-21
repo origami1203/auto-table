@@ -1,6 +1,8 @@
 package org.origami.table.auto.schema;
 
+import org.origami.table.auto.core.DatabaseMetadata;
 import org.origami.table.auto.core.TableMetadata;
+import org.origami.table.auto.dialect.Dialect;
 
 import java.util.List;
 
@@ -12,11 +14,5 @@ import java.util.List;
  */
 public interface SchemaStrategy {
     
-    /**
-     * 根据table元数据获取sql
-     *
-     * @param tableMetadataList 表元数据列表
-     * @return {@code List<String>}
-     */
-    List<String> getSQL(TableMetadata tableMetadata);
+    List<String> getSQLString(Dialect dialect, DatabaseMetadata databaseMetadata, TableMetadata tableMetadata);
 }
