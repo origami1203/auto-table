@@ -19,9 +19,7 @@ public class TableNameAnnotationResolver implements TableTypeAnnotationResolver 
         if (Strings.isNullOrEmpty(tableName)) {
             tableName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entityClass.getSimpleName());
         }
-        return new TableMetadata().tableName(tableName)
-                                  .engine(Constants.DEFAULT_ENGINE)
-                                  .charset(Constants.DEFAULT_CHARSET);
+        return new TableMetadata().setTableName(tableName);
     }
     
     @Override
