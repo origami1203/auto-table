@@ -1,5 +1,6 @@
 package org.origami.table.auto.core;
 
+import com.google.common.collect.ImmutableList;
 import lombok.RequiredArgsConstructor;
 
 import javax.sql.DataSource;
@@ -43,8 +44,23 @@ public class DatabaseMetadata {
         return tables.containsKey(tableName);
     }
 
+    /**
+     * 通过tableName获取table
+     *
+     * @param tableName 表名
+     * @return {@code TableMetadata}
+     */
     public TableMetadata getByTableName(String tableName) {
         return tables.get(tableName);
+    }
+
+    /**
+     * 获取所有表的不可变列表
+     *
+     * @return {@code List<TableMetadata>}
+     */
+    public List<TableMetadata> getTables() {
+        return ImmutableList.copyOf(tables.values());
     }
 
     public static DatabaseMetadata getDatabaseMetadata(DataSource dataSource) throws SQLException {
