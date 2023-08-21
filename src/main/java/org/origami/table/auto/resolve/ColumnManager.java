@@ -15,10 +15,11 @@ import java.util.List;
 public final class ColumnManager {
     
     private final List<ColumnAnnotationResolver> resolves;
-    private static  ColumnManager INSTANCE;
+    private static ColumnManager INSTANCE;
     
     public ColumnManager(Dialect dialect) {
-        resolves = ImmutableList.of(new TableIdAnnotationResolver(dialect),
+        resolves = ImmutableList.of(new ColumnAnnotationResolverImpl(dialect),
+                                    new TableIdAnnotationResolver(dialect),
                                     new TableFieldAnnotationResolverImpl(dialect),
                                     new DefaultColumnTypeResolver(dialect));
     }
