@@ -16,23 +16,12 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Table {
-    
+
     /**
      * 表名,默认为类名转下划线
      */
     String value() default "";
-    
-    
-    /**
-     * 字符集
-     */
-    String charset() default "utf8mb4";
-    
-    /**
-     * 引擎
-     */
-    String engine() default "innodb";
-    
+
     /**
      * 备注
      */
