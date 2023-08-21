@@ -5,12 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Strings;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.type.JdbcType;
 import org.origami.table.auto.constant.Constants;
 import org.origami.table.auto.core.ColumnMetadata;
 import org.origami.table.auto.dialect.Dialect;
-import org.origami.table.auto.dialect.MySQLDataType;
-import org.origami.table.auto.dialect.TypeHandlerRegistry;
 
 import java.lang.reflect.Field;
 
@@ -20,36 +17,36 @@ import java.lang.reflect.Field;
  */
 @RequiredArgsConstructor
 public class TableIdAnnotationResolver implements ColumnAnnotationResolver {
-    
+
     private final Dialect dialect;
-    
+
     @Override
     public ColumnMetadata resolve(Field field) {
         TableId tableId = field.getAnnotation(TableId.class);
         boolean isAutoIncrement = false;
-        
+
         IdType idType = tableId.type();
         String columnName = tableId.value();
-        
+
         if (Strings.isNullOrEmpty(columnName)) {
             columnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, field.getName());
         }
-        
+
         if (IdType.AUTO == idType) {
             isAutoIncrement = true;
         }
-        
+
         String actualTypeName = dialect.getActualTypeName(field.getType(), null, null, null);
-        
-        
-        return new ColumnMetadata().columnName(columnName)
-                                   .primary(true)
-                                   .isAutoIncrement(isAutoIncrement)
-                                   .nullable(false)
-                                   .actualTypeName(actualTypeName)
-                                   .comment(Constants.DEFAULT_ID_COMMENT);
+
+
+        return new ColumnMetadata().setColumnName(columnName)
+                                   .setPrimary(true)
+                                   .setIsAutoIncrement(isAutoIncrement)
+                                   .setNullable(false)
+                                   .setActualTypeName(actualTypeName)
+                                   .setComment(Constants.DEFAULT_ID_COMMENT);
     }
-    
+
     @Override
     public boolean supports(Field field) {
         return field.isAnnotationPresent(TableId.class);

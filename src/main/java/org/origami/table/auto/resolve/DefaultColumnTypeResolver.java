@@ -22,7 +22,7 @@ public class DefaultColumnTypeResolver implements ColumnAnnotationResolver {
         String actualTypeName = dialect.getActualTypeName(field.getType(), null, null, null);
         String columnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, field.getName());
         
-        return new ColumnMetadata().columnName(columnName).actualTypeName(actualTypeName);
+        return new ColumnMetadata().setColumnName(columnName).setActualTypeName(actualTypeName);
     }
     
     @Override
