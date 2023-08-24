@@ -15,13 +15,13 @@ public class TableNameAnnotationResolver implements TableTypeAnnotationResolver 
     public TableMetadata resolve(Class<?> entityClass) {
         TableName tableNameAnno = entityClass.getAnnotation(TableName.class);
         String tableName = tableNameAnno.value();
-        
+
         if (Strings.isNullOrEmpty(tableName)) {
             tableName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entityClass.getSimpleName());
         }
-        return new TableMetadata().setTableName(tableName);
+        return new TableMetadata().setTableName(tableName).setEntityClass(entityClass);
     }
-    
+
     @Override
     public boolean supports(Class<?> entityClass) {
         return entityClass.isAnnotationPresent(TableName.class);

@@ -16,10 +16,11 @@ import java.util.Map;
 @Accessors(chain = true)
 public class TableMetadata {
 
+    private Class<?> entityClass;
+
     private String catalog;
 
     private String tableName;
-
 
     private String comment;
 
