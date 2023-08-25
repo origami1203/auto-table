@@ -13,6 +13,7 @@ import java.util.Map;
  * @author origami
  * @date 2023/8/14 23:45
  */
+@Deprecated
 @UtilityClass
 public class SqlHelper {
 
