@@ -18,20 +18,18 @@ import org.origami.table.auto.exception.UnsupportedDatabaseException;
 import org.origami.table.auto.resolve.ColumnManager;
 import org.origami.table.auto.resolve.TableManager;
 import org.origami.table.auto.schema.SchemaContext;
-import org.origami.table.auto.schema.SchemaCreatorStrategyImpl;
 import org.origami.table.auto.schema.SchemaStrategy;
-import org.origami.table.auto.schema.SchemaUpdateStrategyImpl;
-import org.origami.table.auto.schema.SchemaValidateStrategyImpl;
+import org.origami.table.auto.schema.SchemaStrategyFactory;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
-import javax.sql.DataSource;
 import java.lang.reflect.Field;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +44,7 @@ import java.util.Set;
 @Slf4j
 @Component
 @EnableConfigurationProperties(AutoTableProperties.class)
-public class TableGenerate {
+public class TableGenerate implements InitializingBean {
 
     @Autowired
     private AutoTableProperties properties;
@@ -58,7 +56,7 @@ public class TableGenerate {
 
         String ddlAuto = properties.getDdlAuto();
 
-        SchemaStrategy schemaStrategy = getSchemaStrategy(ddlAuto);
+        SchemaStrategy schemaStrategy = SchemaStrategyFactory.getSchemaStrategy(ddlAuto);
 
         if (schemaStrategy == null) {
             return;
@@ -78,6 +76,12 @@ public class TableGenerate {
         for (TableMetadata table : entityConvertedTables) {
             schemaContext.handle(dialect, databaseMetadata, table);
         }
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Assert.notNull(properties, "AutoTable: AutoTable配置不能为空");
+        Assert.notNull(jdbcTemplate, "AutoTable: jdbcTemplate配置不能为空");
     }
 
     /**
@@ -153,31 +157,5 @@ public class TableGenerate {
             }
             return exists;
         };
-    }
-
-    private DatabaseMetadata getDatabaseMetadata(DataSource dataSource) throws SQLException {
-
-        return DatabaseMetadata.getDatabaseMetadata(dataSource);
-    }
-
-    private SchemaStrategy getSchemaStrategy(String ddlAuto) {
-        SchemaStrategy strategy = null;
-        switch (ddlAuto) {
-            case "none":
-                break;
-            case "create":
-                strategy = new SchemaCreatorStrategyImpl();
-                break;
-            case "update":
-                strategy = new SchemaUpdateStrategyImpl();
-                break;
-            case "validate":
-                strategy = new SchemaValidateStrategyImpl();
-                break;
-            default:
-                throw new IllegalArgumentException(String.format("不支持的ddl-auto方式[%s]", ddlAuto));
-        }
-
-        return strategy;
     }
 }
