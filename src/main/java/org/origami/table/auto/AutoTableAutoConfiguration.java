@@ -16,16 +16,14 @@ import org.springframework.context.annotation.Import;
 @Import(TableGenerate.class)
 @Configuration(proxyBeanMethods = false)
 public class AutoTableAutoConfiguration {
-    
+
     @Autowired
     TableGenerate tableGenerate;
-    
+
     @Bean
     ApplicationRunner runner() {
         return args -> {
             tableGenerate.generate();
         };
     }
-    
-    
 }
