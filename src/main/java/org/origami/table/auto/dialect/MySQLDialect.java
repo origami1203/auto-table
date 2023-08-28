@@ -1,5 +1,7 @@
 package org.origami.table.auto.dialect;
 
+import org.origami.table.auto.constant.MySQLConstants;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.sql.Types;
@@ -7,6 +9,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * mysql方言类
@@ -15,8 +19,12 @@ import java.util.Date;
  * @date 2023/8/15 18:46
  */
 public class MySQLDialect extends Dialect {
-    
-    public MySQLDialect() {
+
+    private final Map<String, String> config = new HashMap<>();
+
+    public MySQLDialect(Map<String, String> config) {
+        this.config.putAll(config);
+
         registerColumnType(Types.BIT, MySQLDataType.BIT);
         registerColumnType(Types.BOOLEAN, MySQLDataType.BIT);
         registerColumnType(Types.TINYINT, MySQLDataType.TINYINT);
@@ -26,12 +34,13 @@ public class MySQLDialect extends Dialect {
         registerColumnType(Types.VARCHAR, MySQLDataType.VARCHAR);
         registerColumnType(Types.CHAR, MySQLDataType.CHAR);
         registerColumnType(Types.DATE, MySQLDataType.DATE_TIME);
-        registerColumnType(Types.TIMESTAMP, MySQLDataType.TIMESTAMP);
+        // timestamp默认转换为mysql中的datetime
+        registerColumnType(Types.TIMESTAMP, MySQLDataType.DATE_TIME);
         registerColumnType(Types.DECIMAL, MySQLDataType.DECIMAL);
         registerColumnType(Types.DOUBLE, MySQLDataType.DOUBLE);
         registerColumnType(Types.FLOAT, MySQLDataType.FLOAT);
-        
-        registerClassType(boolean.class,MySQLDataType.BIT);
+
+        registerClassType(boolean.class, MySQLDataType.BIT);
         registerClassType(Boolean.class, MySQLDataType.BIT);
         registerClassType(byte.class, MySQLDataType.TINYINT);
         registerClassType(Byte.class, MySQLDataType.TINYINT);
@@ -53,9 +62,17 @@ public class MySQLDialect extends Dialect {
         registerClassType(float.class, MySQLDataType.FLOAT);
         registerClassType(String.class, MySQLDataType.VARCHAR);
     }
-    
+
     @Override
-    protected String getCreateTableString() {
-        return null;
+    public String getNullColumnString() {
+        return " null";
     }
+
+    @Override
+    public String getTableTypeString() {
+        String engine = config.getOrDefault(MySQLConstants.CONFIG_ENGINE_NAME, MySQLConstants.DEFAULT_ENGINE);
+        String charset = config.getOrDefault(MySQLConstants.CONFIG_CHARSET_NAME, MySQLConstants.DEFAULT_CHARSET);
+        return String.format("engine = %s charset = %s", engine, charset);
+    }
+
 }
