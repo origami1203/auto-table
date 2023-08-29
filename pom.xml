@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.origami</groupId>
-    <artifactId>origami-table-auto</artifactId>
-    <version>0.0.1</version>
+    <groupId>io.github.origami1203</groupId>
+    <artifactId>auto-table</artifactId>
+    <version>1.0.0</version>
     <name>auto-table</name>
 
     <description>用于mybatis自动建表,兼容mybatis-plus注解</description>
