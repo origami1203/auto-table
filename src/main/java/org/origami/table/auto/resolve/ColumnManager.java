@@ -13,17 +13,15 @@ import java.util.List;
  * @date 2023/8/15 19:06
  */
 public final class ColumnManager {
-    
+
     private final List<ColumnAnnotationResolver> resolves;
-    private static ColumnManager INSTANCE;
-    
-    public ColumnManager(Dialect dialect) {
-        resolves = ImmutableList.of(new ColumnAnnotationResolverImpl(dialect),
-                                    new TableIdAnnotationResolver(dialect),
-                                    new TableFieldAnnotationResolverImpl(dialect),
-                                    new DefaultColumnTypeResolver(dialect));
+    private static final ColumnManager INSTANCE = new ColumnManager();
+
+    private ColumnManager() {
+        resolves = ImmutableList.of(new ColumnAnnotationResolverImpl(), new TableIdAnnotationResolver(),
+            new TableFieldAnnotationResolverImpl(), new DefaultColumnTypeResolver());
     }
-    
+
     public ColumnMetadata handle(Field field) {
         for (ColumnAnnotationResolver resolver : resolves) {
             if (!resolver.supports(field)) {
@@ -31,16 +29,12 @@ public final class ColumnManager {
             }
             return resolver.resolve(field);
         }
-        throw new UnresolvableException(String.format("不可解析的字段:[%s#%s]",
-                                                      field.getDeclaringClass().getName(),
-                                                      field.getName()));
+        throw new UnresolvableException(
+            String.format("不可解析的字段:[%s#%s]", field.getDeclaringClass().getName(), field.getName()));
     }
-    
-    public static synchronized ColumnManager getInstance(Dialect dialect) {
-        if (INSTANCE == null) {
-            INSTANCE = new ColumnManager(dialect);
-        }
+
+    public static ColumnManager getInstance() {
         return INSTANCE;
     }
-    
+
 }

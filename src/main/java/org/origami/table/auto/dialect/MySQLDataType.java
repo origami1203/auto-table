@@ -12,15 +12,15 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum MySQLDataType implements DateType {
-    
+
     // @formatter:off
-    BIT("bit($l)", 1L, null, null),
+    BIT("bit", null, null, null),
     TINYINT("tinyint", null, null, null),
     SMALLINT("smallint", null, null, null),
     INT("int", null, null, null),
     BIGINT("bigint", null, null, null),
-    VARCHAR("varchar($l)", 255L, null, null),
-    CHAR("char($l)", 10L, null, null),
+    VARCHAR("varchar($l)", 255, null, null),
+    CHAR("char($l)", 10, null, null),
     DECIMAL("decimal($p,$s)", null, 10, 2),
     DATE_TIME("datetime", null, null, null),
     FLOAT("float($p)", null, 10, null),
@@ -32,15 +32,16 @@ public enum MySQLDataType implements DateType {
     UNDEFINED("undefined", null, null, null),
     ;
     // @formatter:on
-    
+
     /**
      * 模板
      */
     private final String template;
+
     /**
      * 字符串类型长度
      */
-    private final Long length;
+    private final Integer length;
     /**
      * 精度
      */

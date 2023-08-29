@@ -1,6 +1,7 @@
 package org.origami.table.auto.core;
 
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.origami.table.auto.constant.Constants;
 
@@ -11,6 +12,7 @@ import org.origami.table.auto.constant.Constants;
  * @date 2023/8/9 22:50
  */
 @Data
+@ToString(exclude = "table")
 @Accessors(chain = true)
 public class ColumnMetadata {
 

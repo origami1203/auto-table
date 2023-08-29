@@ -7,6 +7,7 @@ import org.apache.ibatis.type.JdbcType;
 import org.origami.table.auto.annotations.Column;
 import org.origami.table.auto.core.ColumnMetadata;
 import org.origami.table.auto.dialect.Dialect;
+import org.origami.table.auto.utils.JDBCTypeHelper;
 
 import java.lang.reflect.Field;
 
@@ -16,8 +17,6 @@ import java.lang.reflect.Field;
  */
 @RequiredArgsConstructor
 public class ColumnAnnotationResolverImpl implements ColumnAnnotationResolver {
-
-    private final Dialect dialect;
 
     @Override
     public ColumnMetadata resolve(Field field) {
@@ -33,16 +32,17 @@ public class ColumnAnnotationResolverImpl implements ColumnAnnotationResolver {
         int length = columnAnno.length();
         int scale = columnAnno.scale();
         int precision = columnAnno.precision();
-        String actualTypeName = "";
+
+        Integer jdbcTypeCode = null;
 
         if (Strings.isNullOrEmpty(columnName)) {
             columnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, field.getName());
         }
 
         if (JdbcType.UNDEFINED == jdbcType) {
-            actualTypeName = dialect.getActualTypeName(field.getType(), null, null, scale);
+            jdbcTypeCode = JDBCTypeHelper.getJdbcTypeCodeByClassType(field.getType());
         } else {
-            actualTypeName = dialect.getActualTypeName(jdbcType.TYPE_CODE, null, null, scale);
+            jdbcTypeCode = jdbcType.TYPE_CODE;
         }
 
         if (primary) {
@@ -53,7 +53,7 @@ public class ColumnAnnotationResolverImpl implements ColumnAnnotationResolver {
                                    .setPrimary(primary)
                                    .setNullable(nullable)
                                    .setComment(comment)
-                                   .setActualTypeName(actualTypeName)
+                                   .setJdbcType(jdbcTypeCode)
                                    .setLength(length)
                                    .setPrecision(precision)
                                    .setScale(scale)

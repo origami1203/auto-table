@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.origami.table.auto.constant.Constants;
 import org.origami.table.auto.core.ColumnMetadata;
 import org.origami.table.auto.dialect.Dialect;
+import org.origami.table.auto.utils.JDBCTypeHelper;
 
 import java.lang.reflect.Field;
 
@@ -15,15 +16,13 @@ import java.lang.reflect.Field;
  * @author origami
  * @date 2023/8/10 22:09
  */
-@RequiredArgsConstructor
 public class TableIdAnnotationResolver implements ColumnAnnotationResolver {
-
-    private final Dialect dialect;
 
     @Override
     public ColumnMetadata resolve(Field field) {
         TableId tableId = field.getAnnotation(TableId.class);
         boolean isAutoIncrement = false;
+        Integer jdbcTypeCode = JDBCTypeHelper.getJdbcTypeCodeByClassType(field.getType());
 
         IdType idType = tableId.type();
         String columnName = tableId.value();
@@ -36,14 +35,11 @@ public class TableIdAnnotationResolver implements ColumnAnnotationResolver {
             isAutoIncrement = true;
         }
 
-        String actualTypeName = dialect.getActualTypeName(field.getType(), null, null, null);
-
-
-        return new ColumnMetadata().setColumnName(columnName)
+        return new ColumnMetadata().setJdbcType(jdbcTypeCode)
+                                   .setColumnName(columnName)
                                    .setPrimary(true)
                                    .setIsAutoIncrement(isAutoIncrement)
                                    .setNullable(false)
-                                   .setActualTypeName(actualTypeName)
                                    .setComment(Constants.DEFAULT_ID_COMMENT);
     }
 

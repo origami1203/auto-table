@@ -20,7 +20,7 @@ public class TableAnnotationResolver implements TableTypeAnnotationResolver {
             tableName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entityClass.getSimpleName());
         }
 
-        return new TableMetadata().setTableName(tableName).setComment(comment);
+        return new TableMetadata().setTableName(tableName).setComment(comment).setEntityClass(entityClass);
     }
 
     @Override
