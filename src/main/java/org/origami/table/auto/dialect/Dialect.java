@@ -51,7 +51,7 @@ public abstract class Dialect {
      * @return {@code String}
      */
     public String getCreateTableString() {
-        return "create table ";
+        return "create table";
     }
 
     public String getTableComment(String comment) {

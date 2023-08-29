@@ -39,11 +39,10 @@ public class AlertColumnExporter implements Exporter<ColumnMetadata> {
         } else {
             sb.append("not null");
         }
-        sb.append(' ');
 
         String defaultValue = exportable.getDefaultValue();
         if (!Strings.isNullOrEmpty(defaultValue)) {
-            sb.append(dialect.getDefaultString()).append(' ').append(defaultValue);
+            sb.append(' ').append(dialect.getDefaultString()).append(' ').append(defaultValue);
         }
 
         return new String[]{sb.toString()};

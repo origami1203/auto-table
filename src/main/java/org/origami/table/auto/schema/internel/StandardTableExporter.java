@@ -47,7 +47,7 @@ public class StandardTableExporter implements Exporter<TableMetadata> {
             String columnName = entry.getKey();
             ColumnMetadata column = entry.getValue();
 
-            sb.append(columnName).append(' ');
+            sb.append(' ').append(columnName).append(' ');
 
             String columnDefinition = column.getColumnDefinition();
             if (!Strings.isNullOrEmpty(columnDefinition)) {
@@ -65,19 +65,19 @@ public class StandardTableExporter implements Exporter<TableMetadata> {
 
             Boolean nullable = Optional.ofNullable(column.getNullable()).orElse(Boolean.TRUE);
             if (nullable) {
-                sb.append(dialect.getNullColumnString()).append(' ');
+                sb.append(dialect.getNullColumnString());
             } else {
-                sb.append(" not null ");
+                sb.append(" not null");
             }
 
             String columnComment = column.getComment();
             if (!Strings.isNullOrEmpty(columnComment)) {
-                sb.append(dialect.getColumnComment(columnComment));
+                sb.append(' ').append(dialect.getColumnComment(columnComment));
             }
             sb.append(",");
         }
 
-        sb.deleteCharAt(sb.length() - 1).append(" ) ");
+        sb.deleteCharAt(sb.length() - 1).append(") ");
 
         String tableComment = tableMetadata.getComment();
         if (!Strings.isNullOrEmpty(tableComment)) {
