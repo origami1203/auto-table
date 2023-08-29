@@ -58,6 +58,11 @@ public class SchemaUpdateStrategyImpl implements SchemaStrategy {
 
         for (String sqlString : sqlStrings) {
             jdbcTemplate.execute(sqlString);
+            if (sqlString.startsWith("create")) {
+                log.debug("AutoTable: 建表:[{}]", sqlString);
+                continue;
+            }
+            log.debug("AutoTable: add column语句:[{}]", sqlString);
         }
     }
 }
