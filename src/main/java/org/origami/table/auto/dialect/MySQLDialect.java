@@ -33,7 +33,7 @@ public class MySQLDialect extends Dialect {
         registerColumnType(Types.BIGINT, MySQLDataType.BIGINT);
         registerColumnType(Types.VARCHAR, MySQLDataType.VARCHAR);
         registerColumnType(Types.CHAR, MySQLDataType.CHAR);
-        registerColumnType(Types.DATE, MySQLDataType.DATE_TIME);
+        registerColumnType(Types.DATE, MySQLDataType.DATE);
         // timestamp默认转换为mysql中的datetime
         registerColumnType(Types.TIMESTAMP, MySQLDataType.DATE_TIME);
         registerColumnType(Types.DECIMAL, MySQLDataType.DECIMAL);
